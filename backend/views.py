@@ -7,10 +7,6 @@ from backend.serializers import VisitSerializer
 from backend.tasks import visit_url
 import uuid
 
-class VisitViewSet(viewsets.ModelViewSet):
-    queryset = Visit.objects.all()
-    serializer_class = VisitSerializer
-
 @api_view(['GET', 'PUT'])
 def visit_result(request, ref):
 
