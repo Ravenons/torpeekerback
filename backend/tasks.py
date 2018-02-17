@@ -10,7 +10,11 @@ import os
 @shared_task
 def visit_url(url, ref):
 
-    driver = webdriver.PhantomJS()
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("headless")
+    chrome_options.add_argument("window-size=1920x1080")
+    driver = webdriver.Chrome(options=chrome_options)
+
     driver.get(url)
     handle, path  = tempfile.mkstemp()
     driver.save_screenshot(path)
