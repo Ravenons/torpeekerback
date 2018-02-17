@@ -19,6 +19,6 @@ from backend import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("visit/", views.visit, name="visit"),
-    path("visit_result/<uuid:ref>/", views.visit_result, name="visit_result"),
+    path("visit", views.visit, name="visit"),
+    path("visit_result/<uuid:ref>", views.visit_result, name="visit_result"),
 ]
