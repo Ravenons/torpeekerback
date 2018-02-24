@@ -129,5 +129,8 @@ CORS_ORIGIN_WHITELIST = (
 # Celery config, running in memory by default
 CELERY_TASK_ALWAYS_EAGER = True
 
+# Allow static collection
+STATIC_ROOT = "static/"
+
 # Import local_settings.py
 from torpeekerback.local_settings import *

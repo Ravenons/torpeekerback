@@ -12,6 +12,9 @@ def visit_url(url, ref):
 
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("headless")
+    # --no-sandbox for Chrome, or crash in Debian Docker container
+    # https://github.com/jessfraz/dockerfiles/issues/149
+    chrome_options.add_argument("no-sandbox")
     chrome_options.add_argument("window-size=1920x1080")
     driver = webdriver.Chrome(options=chrome_options)
 

@@ -1,0 +1,8 @@
+# [START runtime]
+runtime: custom
+env: flex
+#entrypoint: gunicorn -b :$PORT mysite.wsgi
+
+beta_settings:
+    cloud_sql_instances: <yeah>
+# [END runtime]
