@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -131,6 +132,9 @@ CELERY_TASK_ALWAYS_EAGER = True
 
 # Allow static collection
 STATIC_ROOT = "static/"
+
+# Where should Celery task PUT visit result (default is for testing)
+VISIT_RESULT_URL = "http://127.0.0.1:8000/visit_result/"
 
 # Import local_settings.py
 from torpeekerback.local_settings import *

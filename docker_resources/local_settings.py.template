@@ -18,10 +18,11 @@ DATABASES = {
 
 # Detect if not running in App Engine (intented to trigger in a local container)
 if not os.getenv('GAE_INSTANCE'):
-    DEBUG = True
     # Use cloud_sql_proxy
     DATABASES['default']['HOST'] = '127.0.0.1'
 
 STATIC_URL = "<yeah>"
 
-ALLOWED_HOSTS = [ "localhost", "<yeah>" ]
+ALLOWED_HOSTS = [ "127.0.0.1", "localhost", "<yeah>" ]
+
+VISIT_RESULT_URL = "<yeah>"

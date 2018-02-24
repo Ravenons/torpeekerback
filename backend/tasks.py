@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
+from django.conf import settings
 
 from selenium import webdriver
 import tempfile
@@ -27,7 +28,7 @@ def visit_url(url, ref):
     f.close()
     os.remove(path) 
 
-    requests.put('http://localhost:8000/visit_result/' + ref,
+    requests.put(settings.VISIT_RESULT_URL + ref,
                  json={'screenshot': str(screenshot, encoding="ascii")})
 
     driver.close()
