@@ -20,4 +20,6 @@ RUN unzip chromedriver_linux64.zip
 RUN mv chromedriver /usr/bin
 RUN rm chromedriver_linux64.zip
 
-ENTRYPOINT [ "gunicorn", "-b", ":8080", "torpeekerback.wsgi" ]
+ENTRYPOINT [ "gunicorn", "-b", ":8080",
+                         "--workers", "4",
+                         "torpeekerback.wsgi" ]
