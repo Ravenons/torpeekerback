@@ -128,6 +128,10 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
     },
 }
 
