@@ -14,9 +14,9 @@ python manage.py collectstatic --no-input
 gsutil -m rsync -r ./static gs://torpeeker/static
 
 # Migrate, but using production DB through cloud_sql_proxy (lol)
-mv torpeekerback/local_settings.py torpeekerback/local_settings.py.pak
-cp docker_resources/local_settings torpeekerback
+mv torpeekerback/local_settings.py torpeekerback/local_settings.py.bak
+cp docker_resources/local_settings.py torpeekerback/local_settings.py
 python manage.py migrate
-mv torpeekerback/local_settings.py.bak torpeeker/local_settings.py
+mv torpeekerback/local_settings.py.bak torpeekerback/local_settings.py
 
 gcloud app deploy
