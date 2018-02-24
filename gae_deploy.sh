@@ -19,4 +19,4 @@ cp docker_resources/local_settings.py torpeekerback/local_settings.py
 python manage.py migrate
 mv torpeekerback/local_settings.py.bak torpeekerback/local_settings.py
 
-gcloud app deploy
+gcloud app deploy --version dev
