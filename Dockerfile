@@ -8,18 +8,26 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 COPY docker_resources/local_settings.py torpeekerback
 
-RUN apt update
+# Install Chrome repo stuff
+RUN \
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+  echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
 
-# Install Chrome 
-RUN apt install --yes chromium
+RUN apt-get update
+
+# Install Chrome itself
+RUN apt-get install --yes google-chrome-stable
 
 # Install ChromeDriver
-RUN apt install --yes unzip
-RUN wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
+RUN apt-get install --yes unzip
+RUN wget https://chromedriver.storage.googleapis.com/$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
 RUN mv chromedriver /usr/bin
 RUN rm chromedriver_linux64.zip
 
-ENTRYPOINT [ "gunicorn", "-b", ":8080",
-                         "--workers", "4",
+# Clean apt package list
+RUN rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT [ "gunicorn", "-b", ":8080", \
+                         "--workers", "4", \
                          "torpeekerback.wsgi" ]
