@@ -1,7 +1,8 @@
 from backend.models import Visit
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.decorators import api_view
-from backend.serializers import VisitSerializer
+from urllib.parse import urlparse
 from backend.tasks import visit_url
 import uuid
 
@@ -45,15 +46,20 @@ def visit_result(request, ref):
 @api_view(['POST'])
 def visit(request):
 
+    url = request.data['url']
     try:
-        url = request.data['url']
-        visit = Visit(url=url)
-        visit.save()
+        # Enforce http/s, avoid chrome:// and stuff...
+        parsed_url = urlparse(url)
+        if not parsed_url.scheme or parsed_url.scheme not in ("http", "https"):
+            url =  "http://" + url
+            assert urlparse(url)
     except Exception:
         return Response({ "error": "URL not specified or incorrect format" },
                         status=status.HTTP_406_NOT_ACCEPTABLE)
 
+    visit = Visit(url=url)
+    visit.save()
     ref = visit.ref.hex
     visit_url.delay(url, ref)
 
-    return Response({'ref': ref})
+    return Response({ 'ref': ref, "final_url": url })
