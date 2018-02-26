@@ -1,8 +1,6 @@
 from backend.models import Visit
-from rest_framework import viewsets
-from django.http import JsonResponse
+from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.parsers import JSONParser
 from backend.serializers import VisitSerializer
 from backend.tasks import visit_url
 import uuid
@@ -13,33 +11,33 @@ def visit_result(request, ref):
     try:
         validated_ref = uuid.UUID(hex=ref)
     except Exception:
-        return JsonResponse({}, status=406)
+        return Response({ "error": "Invalid ID format"},
+                        status=status.HTTP_406_NOT_ACCEPTABLE)
 
     # We should get a result or no result, otherwise, UUIDv4 colision...
     visits = Visit.objects.filter(ref=validated_ref)
     visits_count =visits.count() 
 
     if visits_count == 0:
-        return JsonResponse({}, status=404)
+        return Response({ "error": "ID not found" },
+                        status=status.HTTP_404_NOT_FOUND)
     elif visits_count == 1:
         visit = visits[0]
         if request.method == 'GET':
-            return JsonResponse({'url': visit.url,
-                                 'is_ready': visit.is_ready,
-                                 'screenshot': visit.screenshot},
-                                status=200)
+            return Response({'url': visit.url,
+                             'is_ready': visit.is_ready,
+                             'screenshot': visit.screenshot})
         else: # PUT method
             # Currently just updating is_ready and screenshot...
-            validated_request = JSONParser().parse(request)
-    
-            validated_screenshot = validated_request['screenshot']
-            if not validated_screenshot:
-                return JsonResponse({}, status=406)
+            screenshot = request.data['screenshot']
+            if not screenshot:
+                return Response({ "error": "Screenshot not specified" },
+                                status=status.HTTP_406_NOT_ACCEPTABLE)
 
             visit.is_ready = True
-            visit.screenshot = validated_screenshot
+            visit.screenshot = screenshot
             visit.save()
-            return JsonResponse({}, status=200)
+            return Response({ "info": "Screenshot successfully stored" })
     else:
         # More than 1 result, collision...
         pass
@@ -48,16 +46,14 @@ def visit_result(request, ref):
 def visit(request):
 
     try:
-        validated_request = JSONParser().parse(request)
-        validated_url = validated_request['url']
-        visit = Visit(url=validated_url)
+        url = request.data['url']
+        visit = Visit(url=url)
         visit.save()
     except Exception:
-        return JsonResponse({}, status=406)
+        return Response({ "error": "URL not specified or incorrect format" },
+                        status=status.HTTP_406_NOT_ACCEPTABLE)
 
     ref = visit.ref.hex
-    visit_url.delay(validated_url, ref)
+    visit_url.delay(url, ref)
 
-    return JsonResponse({'ref': ref},
-                        status=200)
-     
+    return Response({'ref': ref})

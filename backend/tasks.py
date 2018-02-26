@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from django.conf import settings
+from urllib.parse import urlparse
 
 from selenium import webdriver
 import tempfile
@@ -12,13 +13,20 @@ import os
 def visit_url(url, ref):
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("headless")
-    chrome_options.add_argument("disable-gpu")
-    chrome_options.add_argument("disable-dev-shm-usage")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-gpu")
+    # Following two options are for Tor proxying
+    proxy_url = settings.PROXY_URL
+    chrome_options.add_argument('--proxy-server={}'.format(proxy_url))
+    proxy_host = urlparse(proxy_url).hostname
+    chrome_options.add_argument(
+      '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE {}'.format(proxy_host))
+    # Docker /dev/shm is too small, and Chrome does not really need it
+    chrome_options.add_argument("--disable-dev-shm-usage")
     # --no-sandbox for Chrome, or crash in Debian Docker container
     # https://github.com/jessfraz/dockerfiles/issues/149
-    chrome_options.add_argument("no-sandbox")
-    chrome_options.add_argument("window-size=1920x1080")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--window-size=1920x1080")
     driver = webdriver.Chrome(options=chrome_options)
 
     driver.get(url)
