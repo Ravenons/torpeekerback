@@ -8,8 +8,5 @@
 # SQLite3
 db.sqlite3
 
-# Google App Engine specific stuff
-gae_deploy.sh
-
 # Specific project files
 torpeeker/local_settings.py
