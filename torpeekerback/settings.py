@@ -101,6 +101,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django REST Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_RATES': {
+        # torpeekerback.throttles.MediumLoadAnonRateThrottle
+        'medium_load_anon': '10/minute',
+        # torpeekerback.throttles.HighLoadAnonRateThrottle
+        'high_load_anon': '5/minute',
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

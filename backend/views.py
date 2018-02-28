@@ -1,12 +1,15 @@
 from backend.models import Visit
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, throttle_classes
+from torpeekerback.throttles import ( MediumLoadAnonRateThrottle,
+                                      HighLoadAnonRateThrottle )
 from urllib.parse import urlparse
 from backend.tasks import visit_url
 import uuid
 
 @api_view(['GET', 'PUT'])
+@throttle_classes([MediumLoadAnonRateThrottle])
 def visit_result(request, ref):
 
     try:
@@ -44,6 +47,7 @@ def visit_result(request, ref):
         pass
 
 @api_view(['POST'])
+@throttle_classes([HighLoadAnonRateThrottle])
 def visit(request):
 
     url = request.data['url']
