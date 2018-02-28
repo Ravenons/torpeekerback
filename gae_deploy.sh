@@ -15,7 +15,7 @@ gsutil -m rsync -r ./static gs://torpeeker/static
 
 # Migrate, but using production DB through cloud_sql_proxy (lol)
 mv torpeekerback/local_settings.py torpeekerback/local_settings.py.bak
-cp docker_resources/local_settings.py torpeekerback/local_settings.py
+cp deploy_resources/local_settings.py torpeekerback/local_settings.py
 python manage.py migrate
 mv torpeekerback/local_settings.py.bak torpeekerback/local_settings.py
 

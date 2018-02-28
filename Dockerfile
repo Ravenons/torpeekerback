@@ -6,7 +6,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-COPY docker_resources/local_settings.py torpeekerback
+COPY deploy_resources/local_settings.py torpeekerback
 
 # Install Chrome repo stuff
 RUN \
