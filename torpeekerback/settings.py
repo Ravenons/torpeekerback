@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'backend.apps.BackendConfig',
     'corsheaders',
 ]
@@ -104,6 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Django REST Framework
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        "rest_framework.authentication.TokenAuthentication",
+    ),
     'DEFAULT_THROTTLE_RATES': {
         # torpeekerback.throttles.MediumLoadAnonRateThrottle
         'medium_load_anon': '10/minute',

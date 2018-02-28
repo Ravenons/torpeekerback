@@ -28,3 +28,6 @@ ALLOWED_HOSTS = [ "127.0.0.1", "localhost", "<yeah>" ]
 VISIT_RESULT_URL = "<yeah>"
 
 PROXY_URL = "<yeah>"
+
+TORPEEKER_CELERY_USER = "<yeah>"
+TORPEEKER_CELERY_TOKEN = "<yeah>"

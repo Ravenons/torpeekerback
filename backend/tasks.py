@@ -38,7 +38,10 @@ def visit_url(url, ref):
     f.close()
     os.remove(path) 
 
-    requests.put(settings.VISIT_RESULT_URL + ref,
+    headers = { "Authorization": "Token {}".format(
+                                    settings.TORPEEKER_CELERY_TOKEN) }
+
+    requests.put(settings.VISIT_RESULT_URL + ref, headers=headers,
                  json={'screenshot': str(screenshot, encoding="ascii")})
 
     driver.close()

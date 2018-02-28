@@ -1,12 +1,15 @@
 FROM python:3
 
-WORKDIR /usr/src/app
+ENV DEPLOY_WORKDIR /usr/src/app
+ENV DEPLOY_RESOURCES_DIR deploy_resources
+
+WORKDIR $DEPLOY_WORKDIR
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-COPY deploy_resources/local_settings.py torpeekerback
+COPY $DEPLOY_RESOURCES_DIR/local_settings.py torpeekerback
 
 # Install Chrome repo stuff
 RUN \
@@ -31,6 +34,8 @@ RUN apt-get install --yes tor
 # Clean apt package list
 RUN rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT [ "gunicorn", "-b", ":8080", \
-                         "--workers", "4", \
-                         "torpeekerback.wsgi" ]
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+
+CMD [ "gunicorn", "-b", ":8080", \
+                  "--workers", "4", \
+                  "torpeekerback.wsgi" ]
