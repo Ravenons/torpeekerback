@@ -3,7 +3,6 @@
 # Mostly a script which executes normal deploy preceded by static files upload
 
 echo "\n** This script executes manage.py commands, so maybe run virtualenv"
-echo "** And run clouq_sql_proxy for migrations in production\n"
 read -p 'Write "deploy" to continue: ' INPUT
 if [ "$INPUT" != "deploy" ]; then
     exit 0
