@@ -15,10 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from backend import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("visit", views.visit, name="visit"),
-    path("visit_result/<slug:ref>", views.visit_result, name="visit_result"),
+    path("backend/", include("backend.urls")),
 ]
