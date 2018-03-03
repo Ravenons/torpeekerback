@@ -9,10 +9,10 @@ case $1 in
         start)
                 gcloud sql instances patch $FIRST_LISTED_SQL \
                                            --activation-policy ALWAYS
-                gcloud --quiet app versions start dev
+                gcloud --quiet app versions start dev --service=default
                 ;;
         stop)
-                gcloud --quiet app versions stop dev
+                gcloud --quiet app versions stop dev --service=default
                 gcloud sql instances patch $FIRST_LISTED_SQL \
                                            --activation-policy NEVER
                 ;;
