@@ -31,3 +31,7 @@ PROXY_URL = "<yeah>"
 
 TORPEEKER_CELERY_USER = "<yeah>"
 TORPEEKER_CELERY_TOKEN = "<yeah>"
+
+# Store trusted uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_URL = "http://127.0.0.1:8000/backend/media/"

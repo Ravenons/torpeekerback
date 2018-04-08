@@ -30,18 +30,18 @@ def visit_url(url, ref):
     driver = webdriver.Chrome(options=chrome_options)
 
     driver.get(url)
-    handle, path  = tempfile.mkstemp()
+    handle, path  = tempfile.mkstemp(suffix=".png")
     driver.save_screenshot(path)
     f = open(path, 'rb')
     binary_screenshot = f.read()
-    screenshot = base64.b64encode(binary_screenshot)
     f.close()
     os.remove(path) 
 
     headers = { "Authorization": "Token {}".format(
                                     settings.TORPEEKER_CELERY_TOKEN) }
 
+    filename = ref + ".png"
     requests.put(settings.VISIT_RESULT_URL + ref, headers=headers,
-                 json={'screenshot': str(screenshot, encoding="ascii")})
+                 files={'screenshot': (filename, binary_screenshot)})
 
     driver.close()

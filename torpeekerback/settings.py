@@ -169,5 +169,9 @@ STATIC_ROOT = "static/"
 # Where should Celery task PUT visit result (default is for testing)
 VISIT_RESULT_URL = "http://127.0.0.1:8000/backend/visit_result/"
 
+# Store trusted uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_URL = "http://127.0.0.1:8000/backend/media/"
+
 # Import local_settings.py
 from torpeekerback.local_settings import *
