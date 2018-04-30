@@ -2,7 +2,7 @@ from django.conf import settings
 import sys
 
 from django.contrib.auth.models import User
-celery_user = settings.TORPEEKER_CELERY_USER
+celery_user = settings.CELERY_TASKS_USER
 existing_celery_users = User.objects.filter(username=celery_user)
 
 if len(existing_celery_users) > 1:
@@ -17,7 +17,7 @@ else:
     print("Celery user created")
 
 from rest_framework.authtoken.models import Token
-celery_token = settings.TORPEEKER_CELERY_TOKEN
+celery_token = settings.CELERY_TASKS_TOKEN
 existing_celery_tokens = Token.objects.filter(user=user)
 
 if len(existing_celery_tokens) > 1:

@@ -29,8 +29,8 @@ VISIT_RESULT_URL = "<yeah>"
 
 PROXY_URL = "<yeah>"
 
-TORPEEKER_CELERY_USER = "<yeah>"
-TORPEEKER_CELERY_TOKEN = "<yeah>"
+CELERY_TASKS_USER = "<yeah>"
+CELERY_TASKS_TOKEN = "<yeah>"
 
 # Store trusted uploaded files
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")

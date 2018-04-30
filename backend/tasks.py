@@ -38,7 +38,7 @@ def visit_url(url, ref):
     os.remove(path) 
 
     headers = { "Authorization": "Token {}".format(
-                                    settings.TORPEEKER_CELERY_TOKEN) }
+                                    settings.CELERY_TASKS_TOKEN) }
 
     filename = ref + ".png"
     requests.put(settings.VISIT_RESULT_URL + ref, headers=headers,
