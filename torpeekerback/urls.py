@@ -15,13 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.views.static import serve
+import django.views.static
 from django.conf import settings
+import django.contrib.staticfiles.views
 
 urlpatterns = [
     path("backend/admin/", admin.site.urls),
     path("backend/", include("backend.urls")),
-    re_path(r"^backend/media/(?P<path>.*)$", serve, {
-        'document_root': settings.MEDIA_ROOT,
-    }),
+    # Hack to serve auto-discovered static content 
+    re_path(r"^backend/static/(?P<path>.*)$",
+            django.contrib.staticfiles.views.serve,
+            kwargs={'insecure': True}),
+    # Hack to serve media files
+    re_path(r"^backend/media/(?P<path>.*)$",
+            django.views.static.serve,
+            {'document_root': settings.MEDIA_ROOT}),
 ]

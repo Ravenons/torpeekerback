@@ -152,7 +152,7 @@ LOGGING = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/backend/static/'
 
 # django-cors-headers
 CORS_ORIGIN_WHITELIST = (
@@ -164,7 +164,7 @@ CORS_ORIGIN_WHITELIST = (
 CELERY_TASK_ALWAYS_EAGER = True
 
 # Allow static collection
-STATIC_ROOT = "static/"
+#STATIC_ROOT = "static/"
 
 # Where should Celery task PUT visit result (default is for testing)
 VISIT_RESULT_URL = "http://127.0.0.1:8000/backend/visit_result/"
@@ -172,6 +172,8 @@ VISIT_RESULT_URL = "http://127.0.0.1:8000/backend/visit_result/"
 # Store trusted uploaded files
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = "http://127.0.0.1:8000/backend/media/"
+
+PROXY_URL = "socks5://127.0.0.1:9050"
 
 # Import local_settings.py
 from torpeekerback.local_settings import *

@@ -36,6 +36,6 @@ RUN rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
 
-CMD [ "gunicorn", "-b", ":8080", \
+CMD [ "gunicorn", "-b", ":8000", \
                   "--workers", "4", \
                   "torpeekerback.wsgi" ]
