@@ -28,9 +28,6 @@ RUN unzip chromedriver_linux64.zip
 RUN mv chromedriver /usr/bin
 RUN rm chromedriver_linux64.zip
 
-# Install Tor
-RUN apt-get install --yes tor
-
 # Clean apt package list
 RUN rm -rf /var/lib/apt/lists/*
 
