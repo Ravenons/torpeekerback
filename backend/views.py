@@ -36,7 +36,7 @@ def visit_result(request, ref):
                              'screenshot': visit.screenshot.url})
         else: # PUT method
             # Currently just updating is_ready and screenshot...
-            screenshot = request.FILES['screenshot']
+            screenshot = request.data['screenshot']
             if not screenshot:
                 return Response({ "error": "Screenshot not specified" },
                                 status=status.HTTP_406_NOT_ACCEPTABLE)

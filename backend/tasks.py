@@ -9,6 +9,13 @@ import base64
 import requests
 import os
 
+PROXY_URL = settings.PROXY_URL
+CELERY_TASKS_TOKEN = settings.CELERY_TASKS_TOKEN
+VISIT_RESULT_URL = settings.VISIT_RESULT_URL
+DEFAULT_FILE_STORAGE = settings.DEFAULT_FILE_STORAGE
+if DEFAULT_FILE_STORAGE == "backend.storages.FileServerStorage":
+    FILE_SERVER_INTERNAL_BASE_URL = settings.FILE_SERVER_INTERNAL_BASE_URL
+
 @shared_task
 def visit_url(url, ref):
 
@@ -16,7 +23,7 @@ def visit_url(url, ref):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
     # Following two options are for Tor proxying
-    proxy_url = settings.PROXY_URL
+    proxy_url = PROXY_URL
     chrome_options.add_argument('--proxy-server={}'.format(proxy_url))
     proxy_host = urlparse(proxy_url).hostname
     chrome_options.add_argument(
@@ -31,6 +38,7 @@ def visit_url(url, ref):
 
     driver.get(url)
     handle, path  = tempfile.mkstemp(suffix=".png")
+    image_mime = "image/png"
     driver.save_screenshot(path)
     f = open(path, 'rb')
     binary_screenshot = f.read()
@@ -38,10 +46,23 @@ def visit_url(url, ref):
     os.remove(path) 
 
     headers = { "Authorization": "Token {}".format(
-                                    settings.CELERY_TASKS_TOKEN) }
+                                    CELERY_TASKS_TOKEN) }
 
     filename = ref + ".png"
-    requests.put(settings.VISIT_RESULT_URL + ref, headers=headers,
-                 files={'screenshot': (filename, binary_screenshot)})
+    backend_url = VISIT_RESULT_URL + ref
+
+    if DEFAULT_FILE_STORAGE == ("django.core.files"
+                                ".storage.FileSystemStorage"):
+        # Storing file in backend, just send it
+        requests.put(backend_url, headers=headers,
+                files={'screenshot': (filename, binary_screenshot, image_mime)})
+
+    elif DEFAULT_FILE_STORAGE == "backend.storages.FileServerStorage":
+        # Storing reference to file in backend, just send file name
+        # ...but send it to file server before
+        requests.post(FILE_SERVER_INTERNAL_BASE_URL,
+                files={'file': (filename, binary_screenshot, image_mime)})
+        requests.put(backend_url, headers=headers,
+                data={'screenshot': filename})
 
     driver.close()
